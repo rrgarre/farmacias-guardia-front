@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import FechaFormateada from './FechaFormateada'
 
 const Farmacias = () => {
   const [listaFarmacias, setListaFarmacias] = useState([])
@@ -15,20 +16,21 @@ const Farmacias = () => {
   const diaActual = new Date().getDate()
   console.log('Fecha atcual: ', diaActual)
   
-  const listaFarmaciasPintar = [listaFarmacias[diaActual-1], listaFarmacias[diaActual]]
+  // Para ajustar el array resultado, filtrar, etc...
+  // const listaFarmaciasPintar = [listaFarmacias[diaActual-1], listaFarmacias[diaActual]]
 
   return (
     <div className='farm-contenedor'>
       {
         listaFarmacias.length == 0
           ? 'No hay resultados para mostrar.'
-          : listaFarmaciasPintar
+          : listaFarmacias
             .map( farmacia => {
               return (
                 <div className='farm-dia' key={farmacia.phone}>
-                  <p className='farm-fecha'>{farmacia.fecha.split(' ')[1]}</p>
+                  <FechaFormateada fecha={farmacia.fecha.split(' ')[1]}/>
                   <div className='farm-diurno'>
-                    <p className='farm-tipo'>--Farmacias de Guardia Diurnas</p>
+                    <p className='farm-tipo'>Farmacias de Guardia Diurnas</p>
                     <p className='farm-horario'>({farmacia.horarioDia.toLowerCase()})</p>
                     <div className='farm-listado'>
                       {
@@ -38,8 +40,10 @@ const Farmacias = () => {
                               <div className='farm'>
                                 <p className='farm-name'>{elem.name}</p>
                                 <p className='farm-address'>{elem.direction}, {elem.number}</p>
-                                <a className='farm-phone' href={elem.phone}>{elem.phone}</a>
-                                <a href={elem.location} className='farm-buttom'>Cómo llegar</a>
+                                <div className='farm-links'>
+                                  <a className='farm-phone' href={'tel:+34'+elem.phone}>{elem.phone}</a>
+                                  <a href={elem.location} className='farm-buttom'>Cómo llegar</a>
+                                </div>
                               </div>
                             )
                           })
@@ -47,8 +51,8 @@ const Farmacias = () => {
                     </div>
                   </div>
                   <div className='farm-nocturno'>
-                    <p className='farm-tipo'>--Farmacias de Guardia Nocturnas</p>
-                    <p className='farm-horario'>({farmacia.horarioDia.toLowerCase()})</p>
+                    <p className='farm-tipo'>Farmacias de Guardia Nocturnas</p>
+                    <p className='farm-horario'>({farmacia.horarioNoche.toLowerCase()})</p>
                     <div className='farm-listado'>
                       {
                         farmacia.fondoNoche
@@ -57,15 +61,16 @@ const Farmacias = () => {
                               <div className='farm'>
                                 <p className='farm-name'>{elem.name}</p>
                                 <p className='farm-address'>{elem.direction}, {elem.number}</p>
-                                <a className='farm-phone' href={elem.phone}>{elem.phone}</a>
-                                <a href={elem.location} className='farm-buttom'>Cómo llegar</a>
+                                <div className='farm-links'>
+                                  <a className='farm-phone' href={elem.phone}>{elem.phone}</a>
+                                  <a href={elem.location} className='farm-buttom'>Cómo llegar</a>
+                                </div>
                               </div>
                             )
                           })
                       }
                     </div>
                   </div>
-                  <hr></hr>
                 </div>
               )
             })
