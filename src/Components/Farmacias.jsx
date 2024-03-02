@@ -39,10 +39,19 @@ const Farmacias = () => {
                             return (
                               <div className='farm'>
                                 <p className='farm-name'>{elem.name}</p>
-                                <p className='farm-address'>{elem.direction}, {elem.number}</p>
+                                <p className='farm-address'>
+                                  <span class="material-symbols-outlined">location_on</span>
+                                  {elem.direction}, {elem.number}
+                                </p>
                                 <div className='farm-links'>
-                                  <a className='farm-phone' href={'tel:+34'+elem.phone}>{elem.phone}</a>
-                                  <a href={elem.location} className='farm-buttom'>Cómo llegar</a>
+                                  <a className='farm-phone' href={'tel:+34'+elem.phone}>
+                                    <span class="material-symbols-outlined">call</span>
+                                    {elem.phone}
+                                  </a>
+                                  <a href={elem.location} className='farm-buttom'>
+                                    <span class="material-symbols-outlined">my_location</span>
+                                    Cómo llegar
+                                  </a>
                                 </div>
                               </div>
                             )
@@ -60,10 +69,18 @@ const Farmacias = () => {
                             return (
                               <div className='farm'>
                                 <p className='farm-name'>{elem.name}</p>
-                                <p className='farm-address'>{elem.direction}, {elem.number}</p>
+                                <p className='farm-address'>
+                                  <span class="material-symbols-outlined">location_on</span>
+                                  {elem.direction}, {elem.number}</p>
                                 <div className='farm-links'>
-                                  <a className='farm-phone' href={elem.phone}>{elem.phone}</a>
-                                  <a href={elem.location} className='farm-buttom'>Cómo llegar</a>
+                                  <a className='farm-phone' href={elem.phone}>
+                                    <span class="material-symbols-outlined">call</span>
+                                    {elem.phone}
+                                  </a>
+                                  <a href={elem.location} className='farm-buttom'>
+                                    <span class="material-symbols-outlined">my_location</span>
+                                    Cómo llegar
+                                  </a>
                                 </div>
                               </div>
                             )
