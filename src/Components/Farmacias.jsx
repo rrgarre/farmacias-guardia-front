@@ -23,7 +23,7 @@ const Farmacias = () => {
     <div className='farm-contenedor'>
       {
         listaFarmacias.length == 0
-          ? 'No hay resultados para mostrar.'
+          ? (<div className='farm-dia'><p className='farm-cargando'>Buscando farmacias ...</p></div>)
           : listaFarmacias
             .map( farmacia => {
               return (
