@@ -13,8 +13,13 @@ const Farmacias = () => {
       })
   }, [])
 
+  const NIGHT_HOUR = 22
+  let nocturnidad = new Date().getHours() >= NIGHT_HOUR
+    ? true
+    : false
   const diaActual = new Date().getDate()
   console.log('Fecha atcual: ', diaActual)
+  console.log('Hora actual: ', new Date().getHours())
   
   // Para ajustar el array resultado, filtrar, etc...
   // const listaFarmaciasPintar = [listaFarmacias[diaActual-1], listaFarmacias[diaActual]]
@@ -29,7 +34,13 @@ const Farmacias = () => {
               return (
                 <div className='farm-dia' key={farmacia.phone}>
                   <FechaFormateada fecha={farmacia.fecha.split(' ')[1]}/>
-                  <div className='farm-diurno'>
+                  
+                  
+                  {
+                    nocturnidad
+                      ? nocturnidad = false
+                      : (
+                        <div className='farm-diurno'>
                     <p className='farm-tipo'>Farmacias de Guardia Diurnas</p>
                     <p className='farm-horario'>({farmacia.horarioDia.toLowerCase()})</p>
                     <div className='farm-listado'>
@@ -37,19 +48,19 @@ const Farmacias = () => {
                         farmacia.fondoDia
                           .map(elem => {
                             return (
-                              <div className='farm'>
+                              <div key={Math.random()} className='farm'>
                                 <p className='farm-name'>{elem.name}</p>
                                 <p className='farm-address'>
-                                  <span class="material-symbols-outlined">location_on</span>
+                                  <span className="material-symbols-outlined">location_on</span>
                                   {elem.direction}, {elem.number}
                                 </p>
                                 <div className='farm-links'>
                                   <a className='farm-phone' href={'tel:+34'+elem.phone}>
-                                    <span class="material-symbols-outlined">call</span>
+                                    <span className="material-symbols-outlined">call</span>
                                     {elem.phone}
                                   </a>
-                                  <a href={elem.location} className='farm-buttom'>
-                                    <span class="material-symbols-outlined">my_location</span>
+                                  <a href={elem.location} className='farm-buttom' target="_blank">
+                                    <span className="material-symbols-outlined">my_location</span>
                                     Cómo llegar
                                   </a>
                                 </div>
@@ -59,6 +70,10 @@ const Farmacias = () => {
                       }
                     </div>
                   </div>
+                      )
+                  }
+
+
                   <div className='farm-nocturno'>
                     <p className='farm-tipo'>Farmacias de Guardia Nocturnas</p>
                     <p className='farm-horario'>({farmacia.horarioNoche.toLowerCase()})</p>
@@ -67,18 +82,18 @@ const Farmacias = () => {
                         farmacia.fondoNoche
                           .map(elem => {
                             return (
-                              <div className='farm'>
+                              <div key={Math.random()} className='farm'>
                                 <p className='farm-name'>{elem.name}</p>
                                 <p className='farm-address'>
-                                  <span class="material-symbols-outlined">location_on</span>
+                                  <span className="material-symbols-outlined">location_on</span>
                                   {elem.direction}, {elem.number}</p>
                                 <div className='farm-links'>
                                   <a className='farm-phone' href={elem.phone}>
-                                    <span class="material-symbols-outlined">call</span>
+                                    <span className="material-symbols-outlined">call</span>
                                     {elem.phone}
                                   </a>
-                                  <a href={elem.location} className='farm-buttom'>
-                                    <span class="material-symbols-outlined">my_location</span>
+                                  <a href={elem.location} className='farm-buttom' target="_blank">
+                                    <span className="material-symbols-outlined">my_location</span>
                                     Cómo llegar
                                   </a>
                                 </div>
