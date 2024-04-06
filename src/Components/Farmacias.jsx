@@ -14,7 +14,8 @@ const Farmacias = () => {
   }, [])
 
   const NIGHT_HOUR = 22
-  let nocturnidad = new Date().getHours() >= NIGHT_HOUR
+  const MORNING_HOUR = 8
+  let nocturnidad = (new Date().getHours() >= NIGHT_HOUR) || (new Date().getHours() <= MORNING_HOUR)
     ? true
     : false
   const diaActual = new Date().getDate()
