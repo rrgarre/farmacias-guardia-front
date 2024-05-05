@@ -7,7 +7,9 @@ const Farmacias = () => {
   useEffect(() => {
     // axios.get('http://194.164.162.139:3004/api/farmacias')
     // axios.get('http://18.197.118.217:3004/api/farmacias')
-    axios.get('https://back2.dev.elitedanza.com:3004/api/farmacias')
+    // axios.get('https://back2.dev.elitedanza.com:3004/api/farmacias')
+    axios.get('https://back2.dev.elitedanza.com:3004/api/farmacias/Lucena-14900/7')
+    // axios.get('http://localhost:3004/api/farmacias/Lucena-14900/7')
       .then(result => {
         setListaFarmacias(result.data)
       })
