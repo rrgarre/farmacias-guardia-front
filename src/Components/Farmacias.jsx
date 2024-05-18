@@ -21,8 +21,31 @@ const Farmacias = () => {
     ? true
     : false
   const diaActual = new Date().getDate()
-  console.log('Fecha atcual: ', diaActual)
-  console.log('Hora actual: ', new Date().getHours())
+  // console.log('Fecha atcual: ', diaActual)
+  // console.log('Hora actual: ', new Date().getHours())
+
+  const comprobarAbierto = (guardia, dia) => {
+    const ahora = new Date()
+    
+    const fechaApertura = guardia.fechaFormateada.split('T')[0]
+    const horaApertura = dia
+    ? guardia.horaAperturaDia.padStart(5, '0') + ':00'
+    : guardia.horaAperturaNoche.padStart(5, '0') + ':00'
+    const apertura = new Date(fechaApertura + 'T' + horaApertura)
+    
+    const horaCierre = dia
+      ? guardia.horaCierreDia.padStart(5, '0')
+      : guardia.horaCierreNoche.padStart(5, '0')
+    let cierre = new Date(fechaApertura + 'T' + horaCierre)
+    if(!dia)
+      cierre.setDate(cierre.getDate() +1)
+   
+    return (
+      ahora >= apertura && ahora <= cierre
+        ? <p className='farm-status'>abierto</p>
+        : ''
+    )
+  }
   
   // Para ajustar el array resultado, filtrar, etc...
   // const listaFarmaciasPintar = [listaFarmacias[diaActual-1], listaFarmacias[diaActual]]
@@ -38,41 +61,43 @@ const Farmacias = () => {
                 <div className='farm-dia' key={farmacia.phone}>
                   <FechaFormateada fecha={farmacia.fecha.split(' ')[1]}/>
                   
-                  
                   {
                     nocturnidad
                       ? nocturnidad = false
                       : (
                         <div className='farm-diurno'>
-                    <p className='farm-tipo'>Farmacias de Guardia Diurnas</p>
-                    <p className='farm-horario'>({farmacia.horarioDia.toLowerCase()})</p>
-                    <div className='farm-listado'>
-                      {
-                        farmacia.fondoDia
-                          .map(elem => {
-                            return (
-                              <div key={Math.random()} className='farm'>
-                                <p className='farm-name'>{elem.name}</p>
-                                <p className='farm-address'>
-                                  <span className="material-symbols-outlined">location_on</span>
-                                  {elem.direction}, {elem.number}
-                                </p>
-                                <div className='farm-links'>
-                                  <a className='farm-phone' href={'tel:+34'+elem.phone}>
-                                    <span className="material-symbols-outlined">call</span>
-                                    {elem.phone}
-                                  </a>
-                                  <a href={elem.location} className='farm-buttom' target="_blank">
-                                    <span className="material-symbols-outlined">my_location</span>
-                                    Cómo llegar
-                                  </a>
-                                </div>
-                              </div>
-                            )
-                          })
-                      }
-                    </div>
-                  </div>
+                          <p className='farm-tipo'>Farmacias de Guardia Diurnas</p>
+                          <p className='farm-horario'>({farmacia.horarioDia.toLowerCase()})</p>
+                          <div className='farm-listado'>
+                            {
+                              farmacia.fondoDia
+                                .map(elem => {
+                                  return (
+                                    <div key={Math.random()} className='farm'>
+                                      {
+                                        comprobarAbierto(farmacia, true)
+                                      }
+                                      <p className='farm-name'>{elem.name}</p>
+                                      <p className='farm-address'>
+                                        <span className="material-symbols-outlined">location_on</span>
+                                        {elem.direction}, {elem.number}
+                                      </p>
+                                      <div className='farm-links'>
+                                        <a className='farm-phone' href={'tel:+34'+elem.phone}>
+                                          <span className="material-symbols-outlined">call</span>
+                                          {elem.phone}
+                                        </a>
+                                        <a href={elem.location} className='farm-buttom' target="_blank">
+                                          <span className="material-symbols-outlined">my_location</span>
+                                          Cómo llegar
+                                        </a>
+                                      </div>
+                                    </div>
+                                  )
+                                })
+                            }
+                          </div>
+                        </div>
                       )
                   }
 
@@ -86,6 +111,9 @@ const Farmacias = () => {
                           .map(elem => {
                             return (
                               <div key={Math.random()} className='farm'>
+                                {
+                                  comprobarAbierto(farmacia, false)
+                                }
                                 <p className='farm-name'>{elem.name}</p>
                                 <p className='farm-address'>
                                   <span className="material-symbols-outlined">location_on</span>
