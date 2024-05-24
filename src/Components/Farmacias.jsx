@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import FechaFormateada from './FechaFormateada'
 
 const Farmacias = () => {
-  const [listaFarmacias, setListaFarmacias] = useState([])
+  const [ listaFarmacias, setListaFarmacias ] = useState([])
+  const [ ocultarDias, setOcultarDias ] = useState(true) 
   useEffect(() => {
     // axios.get('http://194.164.162.139:3004/api/farmacias')
     // axios.get('http://18.197.118.217:3004/api/farmacias')
     // axios.get('https://back2.dev.elitedanza.com:3004/api/farmacias')
-    axios.get('https://back2.dev.elitedanza.com:3004/api/farmacias/Lucena-14900/7')
+    axios.get('https://back2.dev.elitedanza.com:3004/api/farmacias/Lucena-14900/4')
     // axios.get('http://localhost:3004/api/farmacias/Lucena-14900/7')
       .then(result => {
         setListaFarmacias(result.data)
@@ -26,13 +27,12 @@ const Farmacias = () => {
 
   const comprobarAbierto = (guardia, dia) => {
     const ahora = new Date()
-    
     const fechaApertura = guardia.fechaFormateada.split('T')[0]
     const horaApertura = dia
     ? guardia.horaAperturaDia.padStart(5, '0') + ':00'
     : guardia.horaAperturaNoche.padStart(5, '0') + ':00'
     const apertura = new Date(fechaApertura + 'T' + horaApertura)
-    
+
     const horaCierre = dia
       ? guardia.horaCierreDia.padStart(5, '0')
       : guardia.horaCierreNoche.padStart(5, '0')
@@ -46,6 +46,10 @@ const Farmacias = () => {
         : ''
     )
   }
+
+  const handleShowMore = () => {
+    setOcultarDias(false)
+  }
   
   // Para ajustar el array resultado, filtrar, etc...
   // const listaFarmaciasPintar = [listaFarmacias[diaActual-1], listaFarmacias[diaActual]]
@@ -56,9 +60,12 @@ const Farmacias = () => {
         listaFarmacias.length == 0
           ? (<div className='farm-dia'><p className='farm-cargando'>Buscando farmacias ...</p></div>)
           : listaFarmacias
-            .map( farmacia => {
+            .map( (farmacia, index) => {
               return (
-                <div className='farm-dia' key={farmacia.phone}>
+                <div 
+                  className={`farm-dia ${index > 0 && ocultarDias ? 'farm-dia-ocultar' : ''}`}
+                  key={farmacia.phone}
+                >
                   <FechaFormateada fecha={farmacia.fecha.split(' ')[1]}/>
                   
                   {
@@ -137,6 +144,16 @@ const Farmacias = () => {
                 </div>
               )
             })
+      }
+      {
+        ocultarDias && (
+          <button
+          className='farm-button-showmore'
+          onClick={handleShowMore}
+          >
+            mostrar más
+          </button>
+        )
       }
     </div>
   )
