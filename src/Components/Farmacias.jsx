@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import FechaFormateada from './FechaFormateada'
 
 const Farmacias = () => {
@@ -15,6 +15,34 @@ const Farmacias = () => {
         setListaFarmacias(result.data)
       })
   }, [])
+
+  ////////////////////////////////////// ENVIAR TAMAÑO /////////////////////// 
+  // con useRef, añadimos refContainerRef al div general y aqui enlazamos con containerRef 
+  const containerRef = useRef(null);
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        const { width, height } = entry.contentRect;
+        // console.log(`El contenedor ha cambiado de tamaño a ${width}px de ancho y ${height}px de alto`);
+        // Aquí puedes enviar los datos de tamaño al padre utilizando postMessage
+        window.parent.postMessage(
+          {
+            type: 'tamañoIframe',
+            height: height + 100,
+            width: width
+          },
+          '*'
+        );
+      }
+    });
+    resizeObserver.observe(containerRef.current);
+    // Devuelve una función de limpieza para desconectar el observador cuando el componente se desmonta
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+  ////////////////////////////////////// ENVIAR TAMAÑO ///////////////////////
+
 
   const NIGHT_HOUR = 22
   const MORNING_HOUR = 8
@@ -55,7 +83,7 @@ const Farmacias = () => {
   // const listaFarmaciasPintar = [listaFarmacias[diaActual-1], listaFarmacias[diaActual]]
 
   return (
-    <div className='farm-contenedor'>
+    <div ref={containerRef} className='farm-contenedor'>
       {
         listaFarmacias.length == 0
           ? (<div className='farm-dia'><p className='farm-cargando'>Buscando farmacias ...</p></div>)
@@ -64,7 +92,7 @@ const Farmacias = () => {
               return (
                 <div 
                   className={`farm-dia ${index > 0 && ocultarDias ? 'farm-dia-ocultar' : ''}`}
-                  key={farmacia.phone}
+                  key={farmacia.id}
                 >
                   <FechaFormateada fecha={farmacia.fecha.split(' ')[1]}/>
                   
@@ -147,12 +175,14 @@ const Farmacias = () => {
       }
       {
         ocultarDias && (
-          <button
-          className='farm-button-showmore'
-          onClick={handleShowMore}
-          >
-            mostrar más
-          </button>
+          <div className='div-button-showmore'>
+            <button
+            className='farm-button-showmore'
+            onClick={handleShowMore}
+            >
+              Mostrar más días
+            </button>
+          </div>
         )
       }
     </div>
